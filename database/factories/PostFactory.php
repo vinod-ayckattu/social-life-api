@@ -18,7 +18,7 @@ class PostFactory extends Factory
     {
         return [
             'user_id' => \App\Models\User::inRandomOrder()->first()->id,
-            'post' => fake()->paragraph(5)
+            'post' => fake()->paragraph(7)
         ];
     }
 }

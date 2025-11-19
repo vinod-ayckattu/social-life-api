@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use APp\Models\User;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -30,8 +31,30 @@ class UserController extends Controller
             'status' => 200,
             'user' => $user 
         ]);
+    }
 
+    public function userProfile(Request $request)
+    {
+        $user = User::where('id', $request->id)->with('posts')->first();
 
+        return response()->json([
+            'status' => 200,
+            'user' => $user
+        ]);
+    }
 
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+ 
+        if (Auth::attempt($credentials)) {
+            
+            $user = auth()->user();
+
+           // $token = $user->
+        }
     }
 }
