@@ -27,10 +27,17 @@ class UserController extends Controller
             'gender' => $request->gender,
         ]);
 
+        Auth::login($user);
+
+        $user->tokens()->delete();
+        // Create new token
+        $token = $user->createToken('api_token')->plainTextToken;
+
         return response()->json([
-            'status' => 200,
-            'user' => $user 
-        ]);
+            'message' => 'Login successful',
+            'token' => $token,
+            'user' => $user,
+        ], 200);
     }
 
     public function userProfile(Request $request)
@@ -52,9 +59,28 @@ class UserController extends Controller
  
         if (Auth::attempt($credentials)) {
             
-            $user = auth()->user();
+            $user = Auth::user();
+            $user->tokens()->delete();
+            // Create new token
+            $token = $user->createToken('api_token')->plainTextToken;
 
-           // $token = $user->
+            return response()->json([
+                'message' => 'Login successful',
+                'token' => $token,
+                'user' => $user,
+            ], 200);
         }
+        else {
+            return response()->json([
+                'message' => 'Invalid Credentials' 
+            ], 401);
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out']);
     }
 }
