@@ -65,6 +65,7 @@ class UserController extends Controller
             $token = $user->createToken('api_token')->plainTextToken;
 
             return response()->json([
+                'status' => 200,
                 'message' => 'Login successful',
                 'token' => $token,
                 'user' => $user,
@@ -72,8 +73,9 @@ class UserController extends Controller
         }
         else {
             return response()->json([
+                'status' => 401,
                 'message' => 'Invalid Credentials' 
-            ], 401);
+            ], 200);
         }
     }
 
@@ -82,5 +84,26 @@ class UserController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logged out']);
+    }
+
+    public function addInfluencer(Request $request)
+    {
+        $creator = User::where('id', $request->creator_id)->first();
+        $request->user()->influencers()->attach($request->creator_id);
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'You are now following '.$creator->name 
+        ]);
+    }
+    public function removeInfluencer(Request $request)
+    {
+        $creator = User::where('id', $request->creator_id)->first();
+        $request->user()->influencers()->detach($request->creator_id);
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'You are now unfollowing '.$creator->name 
+        ]);
     }
 }

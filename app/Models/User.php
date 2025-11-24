@@ -51,4 +51,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
+    public function influencers()
+    {
+        return $this->belongsToMany(User::class, 'influencers', 'user_id', 'creator_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }
