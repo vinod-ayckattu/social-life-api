@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Http\Request;
 
 class User extends Authenticatable
 {
@@ -55,6 +56,11 @@ class User extends Authenticatable
     public function influencers()
     {
         return $this->belongsToMany(User::class, 'influencers', 'user_id', 'creator_id');
+    }
+
+    public function isInfluencer()
+    {
+        return $this->belongsToMany(User::class, 'influencers', 'creator_id')->where('user_id', auth()->user()->id);
     }
 
     public function users()

@@ -43,10 +43,14 @@ class UserController extends Controller
     public function userProfile(Request $request)
     {
         $user = User::where('id', $request->id)->with('posts')->first();
+        if($request->user()){
+            $following = $request->user()->influencers()->where('creator_id', $request->id)->exists();
+        }
 
         return response()->json([
             'status' => 200,
-            'user' => $user
+            'user' => $user,
+            'following' => $following
         ]);
     }
 
