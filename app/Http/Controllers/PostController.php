@@ -17,4 +17,19 @@ class PostController extends Controller
             'posts' => $posts
         ]);
     }
+
+    public function store(Request $request)
+    {
+        //dd($request->all());
+        $post = Post::create([
+           'post' => $request->post,
+           'user_id' => auth()->user()->id 
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'post' => $post
+        ]);
+
+    }
 }

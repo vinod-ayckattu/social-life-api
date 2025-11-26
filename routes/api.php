@@ -15,6 +15,8 @@ Route::post('/follow', [UserController::class, 'addInfluencer'])->middleware('au
 Route::post('/unfollow', [UserController::class, 'removeInfluencer'])->middleware('auth:sanctum');
 
 Route::get('/posts', [PostController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/posts/store', [PostController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/my-profile', [UserController::class, 'myProfile'])->middleware('auth:sanctum');
 Route::get('/user/{id}', [UserController::class, 'userProfile'])->middleware('auth:sanctum');
 Route::post('/users/store', [UserController::class, 'register']);
 Route::post('/users/auth/store', [UserController::class, 'login']);

@@ -110,4 +110,14 @@ class UserController extends Controller
             'message' => 'You are now unfollowing '.$creator->name 
         ]);
     }
+
+    public function myProfile(Request $request)
+    {
+        $user = $request->user();
+        $user->load(['influencers', 'posts']);
+        return response()->json([
+            'status' => 200,
+            'user' => $user
+        ]);
+    }
 }
